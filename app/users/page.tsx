@@ -1,4 +1,4 @@
-import React from "react";
+import { Suspense } from "react";
 import UserTable from "./UserTable";
 import Link from "next/link";
 
@@ -16,7 +16,13 @@ const UsersPage = async ({
       <Link href="/users/new" className="btn ">
         New User
       </Link>
-      <UserTable sortOrder={sortOrder} />
+      <Suspense
+        fallback={
+          <span className="loading loading-spinner text-success"></span>
+        }
+      >
+        <UserTable sortOrder={sortOrder} />
+      </Suspense>
     </>
   );
 };
