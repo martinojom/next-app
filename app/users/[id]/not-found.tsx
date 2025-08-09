@@ -8,7 +8,7 @@ const UserNotFoundPage = () => {
 
   console.log("Current Pathname:", pathname);
   console.log("User ID:", userId);
-  return <div>User of id {userId} not found</div>;
+  return <div>This user of id {userId} doesn&apos;t exist</div>;
 };
 
 export default UserNotFoundPage;
