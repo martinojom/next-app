@@ -1,51 +1,73 @@
 import { NextRequest, NextResponse } from "next/server";
 import schema from "../schema";
+import { prisma } from "@/prisma/client";
 
 export async function GET(
   request: NextRequest,
   {
     params,
   }: {
-    params: Promise<{ id: number }>;
+    params: Promise<{ productId: string }>;
   }
 ) {
-  const { id } = await params;
-  if (id > 10)
+  const { productId } = await params;
+  console.log(productId);
+
+  const product = await prisma.product.findUnique({
+    where: { id: parseInt(productId) },
+  });
+
+  if (!product)
     return NextResponse.json({ error: "User not found" }, { status: 404 });
-  return NextResponse.json({ id: id, name: "Sugar", price: 0.5 });
+
+  return NextResponse.json(product, { status: 200 });
 }
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: number }> }
+  { params }: { params: Promise<{ productId: string }> }
 ) {
-  const { id } = await params;
+  const { productId } = await params;
   const body = await request.json();
 
   const validation = schema.safeParse(body);
   if (!validation.success)
     return NextResponse.json(validation.error.issues, { status: 400 });
 
-  if (id > 10)
+  const product = await prisma.product.findUnique({
+    where: { id: parseInt(productId) },
+  });
+
+  if (!product)
     return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-  return NextResponse.json(
-    { id: id, name: body.name, price: body.price },
-    { status: 200 }
-  );
+  const newProduct = await prisma.product.update({
+    where: { id: product.id },
+    data: { name: body.name, price: body.price },
+  });
+
+  return NextResponse.json(newProduct, { status: 200 });
 }
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: number }> }
+  { params }: { params: Promise<{ productId: string }> }
 ) {
-  const { id } = await params;
+  const { productId } = await params;
 
-  if (id > 10)
+  const product = await prisma.product.findUnique({
+    where: { id: parseInt(productId) },
+  });
+
+  if (!product)
     return NextResponse.json({ error: "User not found" }, { status: 404 });
 
+  const deletedProduct = await prisma.product.delete({
+    where: { id: product.id },
+  });
+
   return NextResponse.json(
-    { message: "Product deleted successfully" },
+    { deletedProduct, message: "Product deleted successfully" },
     { status: 200 }
   );
 }

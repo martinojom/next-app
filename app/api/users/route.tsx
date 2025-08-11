@@ -13,7 +13,6 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   const body = await request.json();
   const validation = schema.safeParse(body);
-  console.log(body);
 
   if (!validation.success)
     return NextResponse.json(validation.error.message, { status: 400 });

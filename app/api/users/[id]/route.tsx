@@ -39,7 +39,7 @@ export async function PUT(
     return NextResponse.json({ error: "User not found" }, { status: 404 });
 
   const newUser = await prisma.user.update({
-    where: { id: parseInt(id) },
+    where: { id: user.id },
     data: { name: body.name, email: body.email },
   });
 
@@ -61,7 +61,7 @@ export async function DELETE(
     return NextResponse.json({ error: "User not found" }, { status: 404 });
 
   const deletedUser = await prisma.user.delete({
-    where: { id: parseInt(id) },
+    where: { id: user.id },
   });
 
   return NextResponse.json(
