@@ -17,10 +17,15 @@ const UploadPage = () => {
       )}
       <CldUploadWidget
         uploadPreset="om4673mo"
-        onSuccess={(result, { widget }) => {
+        options={{
+          sources: ["local", "unsplash"],
+          multiple: false,
+          maxFiles: 5,
+        }}
+        onSuccess={(result) => {
           // { public_id, secure_url, etc }
 
-          if (result.event !== "success") console.log("Not success");
+          if (result.event !== "success") return;
 
           const info = result.info as cloudinaryResult;
 
