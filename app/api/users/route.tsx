@@ -3,7 +3,7 @@ import schema from "./schema";
 import { prisma } from "@/prisma/client";
 
 // Get - getting data
-export async function GET() {
+export async function GET(request: NextRequest) {
   const users = await prisma.user.findMany();
 
   return NextResponse.json(users);
